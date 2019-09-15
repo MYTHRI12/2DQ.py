@@ -1,0 +1,56 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from coeffs import *
+
+P=np.array([4,7])
+O=np.array([0,0])
+I = np.array([[1,0],[0,1]])
+omat = np.array([[0,1],[-1,0]])
+r=np.sqrt(9)
+d1=(np.linalg.norm(O-P))
+d2=np.sqrt((d1*d1)-(r*r))
+
+k1=np.sqrt((d2*d2)/9)
+k2=-np.sqrt((d2*d2)/9)
+R1=I+(k1*omat)
+R2=I+(k2*omat)
+
+Q1=np.linalg.inv(R1)@P
+Q2=np.linalg.inv(R2)@P
+print(Q1)
+print(Q2)
+
+x_PO=line_gen(P,O)
+x_PQ1=line_gen(P,Q1)
+x_PQ2=line_gen(P,Q2)
+
+len=100
+
+theta=np.linspace(0,2*np.pi,len)
+x_circ=np.zeros((2,len))
+x_circ[0,:]=r*np.cos(theta)
+x_circ[1,:]=r*np.sin(theta)
+x_circ=(x_circ.T+O).T
+
+
+plt.plot(P[0], P[1], 'o')
+plt.text(P[0] * (1 + 0.1), P[1] * (1 - 0.1) , 'P')
+plt.plot(O[0], O[1], 'o')
+plt.text(O[0] * (1 - 0.2), O[1] * (1) , 'O')
+plt.plot(Q1[0], Q1[1], 'o')
+plt.text(Q1[0] * (1 + 0.1), Q1[1] * (1 - 0.1) , 'Q1')
+plt.plot(Q2[0], Q2[1], 'o')
+plt.text(Q2[0] * (1 + 0.1), Q2[1] * (1 - 0.1) , 'Q2')
+
+plt.plot(x_PO[0,:],x_PO[1,:],label='$PO$')
+plt.plot(x_PQ1[0,:],x_PQ1[1,:],label='$PQ1$')
+plt.plot(x_PQ2[0,:],x_PQ2[1,:],label='$PQ2$')
+plt.plot(x_circ[0,:],x_circ[1,:],label='$circle$')
+
+plt.xlabel('$X$')
+plt.ylabel('$Y$')
+plt.legend(loc='upper right')
+plt.grid()
+plt.axis('equal')
+
+plt.show()
